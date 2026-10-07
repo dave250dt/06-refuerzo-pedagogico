@@ -18,11 +18,11 @@
  *  4. Ejecuta en tu terminal: `pnpm run start:04`
  */
 
-import { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BotonContador } from '@/components/BotonContador';
 import { ContadorDisplay } from '@/components/ContadorDisplay';
 import { calcularValor, estadoUI, type ContadorConfig } from '@/domain/counter';
+import { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function Home() {
   // 🔎 ¿Por qué el estado arranca en 0? ¿Qué cambiaría si empezara en otro valor?
@@ -36,17 +36,50 @@ export default function Home() {
 
   // 👉 Antes de implementar, revisa el TSDoc de `calcularValor` (src/domain/counter.ts):
   //    ahí está el contrato; tú escribes el cómo.
-  const incrementar = () => {setValor(calcularValor(config, 'incrementar'));
-    
+  const incrementar = () => {
+    setValor(calcularValor(config, 'incrementar'))
   };
-  const decrementar = () => {setValor(calcularValor(config, 'decrementar'));
-    
+  const decrementar = () => {
+    setValor(calcularValor(config, 'decrementar'))
   };
-  const reiniciar = () => {setValor(0);
-    
+  const reiniciar = () => {
+    setValor(0);
   };
 
-  return (
+    const [Empanadas, setEmpanadas] = useState(0);
+
+  const configEmpanadas: ContadorConfig = { valor: Empanadas, paso: 1, minimo: 0, maximo: 10 };
+
+  const estadoEmpanadas = estadoUI(Empanadas, configEmpanadas);
+
+  const incrementarEmpanadas = () => {
+    setEmpanadas(calcularValor(configEmpanadas, 'incrementar'))
+  };
+  const decrementarEmpanadas = () => {
+    setEmpanadas(calcularValor(configEmpanadas, 'decrementar'))
+  };
+  const reiniciarEmpanadas = () => {
+    setEmpanadas(0);
+  };
+
+    const [Jugos, setJugos] = useState(0);
+
+  const configJugos: ContadorConfig = { valor: Jugos, paso: 1, minimo: 0, maximo: 10 };
+
+
+  const estadoJugos = estadoUI(Jugos, configJugos);
+
+  const incrementarJugos = () => {
+    setJugos(calcularValor(configJugos, 'incrementar'))
+  };
+  const decrementarJugos = () => {
+    setJugos(calcularValor(configJugos, 'decrementar'))
+  };
+  const reiniciarJugos = () => {
+    setJugos(0);
+  };
+
+ return (
     <SafeAreaView style={styles.screen}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Bar Salesiano · Contadores</Text>
@@ -56,6 +89,7 @@ export default function Home() {
 
         {/* 📖 Revisa el TSDoc de <BotonContador>: props, variantes y feedback */}
         <View style={styles.actions}>
+          
           <BotonContador
             label="+1"
             onPress={incrementar}
@@ -71,8 +105,42 @@ export default function Home() {
           <BotonContador label="Reiniciar" onPress={reiniciar} variante="danger" />
         </View>
 
-        {/* 👇 TODO INTEGRADOR: agrega los contadores de Empanadas y Jugos
-            repitiendo el estado (const [.., ..] = useState(0)) y sus botones. */}
+        <ContadorDisplay valor={Empanadas} etiqueta="Empanadas" />
+        <View style={styles.actions}>
+          
+          <BotonContador
+            label="+1"
+            onPress={incrementarEmpanadas}
+            variante="primary"
+            disabled={estadoEmpanadas === 'MAXIMO'}
+          />
+          <BotonContador
+            label="-1"
+            onPress={decrementarEmpanadas}
+            variante="secondary"
+            disabled={estadoEmpanadas === 'MINIMO'}
+          />
+          <BotonContador label="Reiniciar" onPress={reiniciarEmpanadas} variante="danger" />
+        </View>
+
+        {/* JUGOS */}
+        <ContadorDisplay valor={Jugos} etiqueta="Jugos" />
+        <View style={styles.actions}>
+          
+          <BotonContador
+            label="+1"
+            onPress={incrementarJugos}
+            variante="primary"
+            disabled={estadoEmpanadas === 'MAXIMO'}
+          />
+          <BotonContador
+            label="-1"
+            onPress={decrementarJugos}
+            variante="secondary"
+            disabled={estadoEmpanadas === 'MINIMO'}
+          />
+          <BotonContador label="Reiniciar" onPress={reiniciarJugos} variante="danger" />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
