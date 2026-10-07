@@ -53,7 +53,10 @@ export interface ContadorConfig {
  */
 export function calcularValor(config: ContadorConfig, direccion: Direccion): number {
   // 👇 TODO: reemplaza este return por tu lógica de cálculo
-  return config.valor;
+  const delta = direccion === 'incrementar' ? config.paso : -config.paso;
+  const candidato = config.valor + delta;
+  return Math.min(config.maximo, Math.max(config.minimo, candidato));
+
 }
 
 /**
@@ -65,6 +68,7 @@ export function calcularValor(config: ContadorConfig, direccion: Direccion): num
  *          `'IDLE'` en cualquier otro caso.
  */
 export function estadoUI(valor: number, config: ContadorConfig): EstadoUI {
-  // 👇 TODO: reemplaza este return por tu lógica de unión discriminada
+  if (valor <= config.minimo) return 'MINIMO';
+  if (valor >= config.maximo) return 'MAXIMO';
   return 'IDLE';
 }
